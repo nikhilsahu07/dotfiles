@@ -95,7 +95,9 @@ echo -e "${BLUE}🔧 Installing development tools...${NC}"
 # Install Neovim 0.11.2
 if ! command_exists nvim || [[ "$(nvim --version | head -1)" != *"0.11.2"* ]]; then
     echo -e "${YELLOW}🌟 Installing Neovim v0.11.2...${NC}"
-    wget -q https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux64.tar.gz
+    echo -e "${YELLOW}📥 Downloading Neovim binary (~10MB)...${NC}"
+    wget --progress=bar:force https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux64.tar.gz 2>&1 | sed 's/^/   /'
+    echo -e "${YELLOW}📦 Extracting and installing...${NC}"
     sudo tar -xzf nvim-linux64.tar.gz -C /opt/
     sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
     rm nvim-linux64.tar.gz
@@ -131,7 +133,9 @@ fi
 if ! command_exists lsd; then
     echo -e "${YELLOW}📂 Installing lsd...${NC}"
     LSD_VERSION="1.0.0"
-    wget -q "https://github.com/lsd-rs/lsd/releases/download/v${LSD_VERSION}/lsd_${LSD_VERSION}_amd64.deb"
+    echo -e "${YELLOW}📥 Downloading lsd package...${NC}"
+    wget --progress=bar:force "https://github.com/lsd-rs/lsd/releases/download/v${LSD_VERSION}/lsd_${LSD_VERSION}_amd64.deb" 2>&1 | sed 's/^/   /'
+    echo -e "${YELLOW}📦 Installing lsd package...${NC}"
     sudo dpkg -i "lsd_${LSD_VERSION}_amd64.deb" || sudo apt-get install -f -y
     rm "lsd_${LSD_VERSION}_amd64.deb"
     echo -e "${GREEN}✅ lsd installed successfully${NC}"
@@ -226,9 +230,12 @@ fi
 
 if [[ ! -f "$HOME/.local/share/fonts/JetBrainsMono Nerd Font Complete.ttf" ]]; then
     echo -e "${YELLOW}🔤 Installing JetBrains Mono Nerd Font...${NC}"
-    wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/JetBrainsMono.zip"
+    echo -e "${YELLOW}📥 Downloading font package (~15MB)...${NC}"
+    wget --progress=bar:force "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/JetBrainsMono.zip" 2>&1 | sed 's/^/   /'
+    echo -e "${YELLOW}📦 Extracting fonts...${NC}"
     unzip -q JetBrainsMono.zip -d "$HOME/.local/share/fonts/"
     rm JetBrainsMono.zip
+    echo -e "${YELLOW}🔄 Refreshing font cache...${NC}"
     fc-cache -fv >/dev/null 2>&1
     echo -e "${GREEN}✅ JetBrains Mono Nerd Font installed successfully${NC}"
 fi
@@ -239,7 +246,9 @@ echo -e "${BLUE}🐹 Installing Go (optional)...${NC}"
 if ! command_exists go; then
     echo -e "${YELLOW}🐹 Installing Go...${NC}"
     GO_VERSION="1.21.6"
-    wget -q "https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz"
+    echo -e "${YELLOW}📥 Downloading Go ${GO_VERSION} (~130MB)...${NC}"
+    wget --progress=bar:force "https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz" 2>&1 | sed 's/^/   /'
+    echo -e "${YELLOW}📦 Installing Go...${NC}"
     sudo tar -C /usr/local -xzf "go${GO_VERSION}.linux-amd64.tar.gz"
     rm "go${GO_VERSION}.linux-amd64.tar.gz"
     echo 'export PATH=$PATH:/usr/local/go/bin' >> "$HOME/.profile"
