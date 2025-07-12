@@ -270,10 +270,10 @@ if [[ ! -f "$HOME/.local/share/fonts/JetBrainsMono Nerd Font Complete.ttf" ]]; t
     echo -e "${YELLOW}📥 Downloading font package (~15MB)...${NC}"
     if wget --progress=bar:force "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/JetBrainsMono.zip" 2>&1 | sed 's/^/   /'; then
         echo -e "${YELLOW}📦 Extracting fonts...${NC}"
-        unzip -q JetBrainsMono.zip -d "$HOME/.local/share/fonts/"
+        unzip -o -q JetBrainsMono.zip -d "$HOME/.local/share/fonts/"
         rm JetBrainsMono.zip
         echo -e "${YELLOW}🔄 Refreshing font cache...${NC}"
-        fc-cache -fv >/dev/null 2>&1
+        fc-cache -f >/dev/null 2>&1 || echo -e "${YELLOW}⚠️  Font cache refresh may take a moment...${NC}"
         echo -e "${GREEN}✅ JetBrains Mono Nerd Font installed successfully${NC}"
     else
         echo -e "${YELLOW}⚠️  Font download failed, continuing...${NC}"
