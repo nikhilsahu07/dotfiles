@@ -102,7 +102,7 @@ alias gcm='git commit -m'
 alias gd='git diff'
 alias gl='git log --oneline --graph --decorate'
 alias glog='git log --oneline --graph --decorate --all'
-alias gundo='git reset --soft HEAD~1'
+
 
 # System aliases
 alias ..='cd ..'
