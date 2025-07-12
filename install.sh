@@ -7,7 +7,8 @@
 # 
 # Includes system tools matching your local setup:
 # - git, curl, htop, zip/unzip
-# - ripgrep (rg), fzf, bat (batcat), locate (plocate)
+# - ripgrep (rg), fzf, bat (batcat), locate (plocate), lsd, fastfetch
+# - GitHub CLI (gh) for git workflows
 # - Plus development tools: neovim, tmux, zsh, node.js, python3, go, docker
 # ============================================================================
 
@@ -96,22 +97,35 @@ echo -e "${BLUE}🔧 Installing development tools...${NC}"
 if ! command_exists nvim; then
     echo -e "${YELLOW}🌟 Installing Neovim (latest stable)...${NC}"
     echo -e "${YELLOW}📥 Downloading Neovim binary (~10MB)...${NC}"
-    curl -LO --progress-bar https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-    echo -e "${YELLOW}📦 Extracting and installing...${NC}"
-    sudo rm -rf /opt/nvim
-    sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-    rm nvim-linux-x86_64.tar.gz
-    
-    # Add to PATH - check if already exists
-    if ! grep -q "/opt/nvim-linux-x86_64/bin" ~/.profile; then
-        echo 'export PATH="$PATH:/opt/nvim-linux-x86_64/bin"' >> ~/.profile
+    if curl -LO --progress-bar https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz; then
+        echo -e "${YELLOW}📦 Extracting and installing...${NC}"
+        sudo rm -rf /opt/nvim
+        sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+        rm nvim-linux-x86_64.tar.gz
+        
+        # Create symlink for global access
+        sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
+        
+        # Also add to PATH for good measure
+        if ! grep -q "/opt/nvim-linux-x86_64/bin" ~/.profile; then
+            echo 'export PATH="$PATH:/opt/nvim-linux-x86_64/bin"' >> ~/.profile
+        fi
+        
+        # Make available in current session
+        export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+        
+        # Verify installation
+        if command_exists nvim; then
+            echo -e "${GREEN}✅ Neovim installed successfully${NC}"
+            echo -e "${GREEN}📝 Version: $(nvim --version | head -1)${NC}"
+        else
+            echo -e "${YELLOW}⚠️  Neovim installed but not in PATH, restart shell${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  Neovim download failed, continuing...${NC}"
     fi
-    
-    # Make available in current session
-    export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
-    
-    echo -e "${GREEN}✅ Neovim installed successfully${NC}"
-    echo -e "${YELLOW}📝 Note: Restart your shell or run 'source ~/.profile' for PATH changes${NC}"
+else
+    echo -e "${GREEN}✅ Neovim already installed - $(nvim --version | head -1)${NC}"
 fi
 
 # Install additional tools
@@ -149,6 +163,42 @@ if ! command_exists lsd; then
     sudo dpkg -i "lsd_${LSD_VERSION}_amd64.deb" || sudo apt-get install -f -y
     rm "lsd_${LSD_VERSION}_amd64.deb"
     echo -e "${GREEN}✅ lsd installed successfully${NC}"
+else
+    echo -e "${GREEN}✅ lsd already installed${NC}"
+fi
+
+# Install fastfetch (modern neofetch replacement)
+if ! command_exists fastfetch; then
+    echo -e "${YELLOW}🚀 Installing fastfetch...${NC}"
+    echo -e "${YELLOW}📥 Downloading fastfetch package...${NC}"
+    FASTFETCH_VERSION="2.25.0"
+    if wget --progress=bar:force "https://github.com/fastfetch-cli/fastfetch/releases/download/${FASTFETCH_VERSION}/fastfetch-linux-amd64.deb" 2>&1 | sed 's/^/   /'; then
+        echo -e "${YELLOW}📦 Installing fastfetch package...${NC}"
+        sudo dpkg -i "fastfetch-linux-amd64.deb" || sudo apt-get install -f -y
+        rm "fastfetch-linux-amd64.deb"
+        echo -e "${GREEN}✅ fastfetch installed successfully${NC}"
+    else
+        echo -e "${YELLOW}⚠️  fastfetch download failed, continuing...${NC}"
+    fi
+else
+    echo -e "${GREEN}✅ fastfetch already installed${NC}"
+fi
+
+# Install GitHub CLI (gh)
+if ! command_exists gh; then
+    echo -e "${YELLOW}📦 Installing GitHub CLI (gh)...${NC}"
+    echo -e "${YELLOW}📥 Adding GitHub CLI repository...${NC}"
+    sudo mkdir -p -m 755 /etc/apt/keyrings
+    wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
+    sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+    echo -e "${YELLOW}🔄 Updating package lists...${NC}"
+    sudo apt-get update -qq
+    echo -e "${YELLOW}📦 Installing GitHub CLI...${NC}"
+    sudo apt-get install -y gh
+    echo -e "${GREEN}✅ GitHub CLI installed successfully${NC}"
+else
+    echo -e "${GREEN}✅ GitHub CLI already installed${NC}"
 fi
 
 # Install fzf (fuzzy finder)
