@@ -1,5 +1,5 @@
 require("mason-lspconfig").setup({
-  ensure_installed = { "lua_ls", "ts_ls", "gopls", "yamlls", "dockerls", "jsonls", "bashls" }
+  ensure_installed = { "ts_ls", "yamlls", "dockerls", "jsonls", "bashls" }
 })
 
 local lspconfig = require('lspconfig')
@@ -83,8 +83,6 @@ require("lspconfig").lua_ls.setup {
 }
 
 require("lspconfig").ts_ls.setup({})
-require("lspconfig").gopls.setup({})
-require("lspconfig").tailwindcss.setup({})
 require("lspconfig").yamlls.setup({})
 require("lspconfig").dockerls.setup({})
 require("lspconfig").jsonls.setup({})
