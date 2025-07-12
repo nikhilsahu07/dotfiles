@@ -92,16 +92,26 @@ chsh -s $(which zsh)
 
 echo -e "${BLUE}🔧 Installing development tools...${NC}"
 
-# Install Neovim 0.11.2
-if ! command_exists nvim || [[ "$(nvim --version | head -1)" != *"0.11.2"* ]]; then
-    echo -e "${YELLOW}🌟 Installing Neovim v0.11.2...${NC}"
+# Install Neovim (latest stable)
+if ! command_exists nvim; then
+    echo -e "${YELLOW}🌟 Installing Neovim (latest stable)...${NC}"
     echo -e "${YELLOW}📥 Downloading Neovim binary (~10MB)...${NC}"
-    wget --progress=bar:force https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux64.tar.gz 2>&1 | sed 's/^/   /'
+    curl -LO --progress-bar https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
     echo -e "${YELLOW}📦 Extracting and installing...${NC}"
-    sudo tar -xzf nvim-linux64.tar.gz -C /opt/
-    sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
-    rm nvim-linux64.tar.gz
-    echo -e "${GREEN}✅ Neovim v0.11.2 installed successfully${NC}"
+    sudo rm -rf /opt/nvim
+    sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+    rm nvim-linux-x86_64.tar.gz
+    
+    # Add to PATH - check if already exists
+    if ! grep -q "/opt/nvim-linux-x86_64/bin" ~/.profile; then
+        echo 'export PATH="$PATH:/opt/nvim-linux-x86_64/bin"' >> ~/.profile
+    fi
+    
+    # Make available in current session
+    export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+    
+    echo -e "${GREEN}✅ Neovim installed successfully${NC}"
+    echo -e "${YELLOW}📝 Note: Restart your shell or run 'source ~/.profile' for PATH changes${NC}"
 fi
 
 # Install additional tools
