@@ -154,7 +154,14 @@ fi
 # Install fzf (fuzzy finder)
 if ! command_exists fzf; then
     echo -e "${YELLOW}🔍 Installing fzf...${NC}"
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    if [[ -d "$HOME/.fzf" ]]; then
+        echo -e "${YELLOW}📁 fzf directory exists, updating...${NC}"
+        cd "$HOME/.fzf" && git pull
+    else
+        echo -e "${YELLOW}📥 Cloning fzf repository...${NC}"
+        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    fi
+    echo -e "${YELLOW}🔧 Installing fzf...${NC}"
     ~/.fzf/install --all
     echo -e "${GREEN}✅ fzf installed successfully${NC}"
 fi
@@ -166,6 +173,8 @@ if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
     echo -e "${YELLOW}🐚 Installing Oh My Zsh...${NC}"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
     echo -e "${GREEN}✅ Oh My Zsh installed successfully${NC}"
+else
+    echo -e "${GREEN}✅ Oh My Zsh already installed${NC}"
 fi
 
 # Install Powerlevel10k theme
@@ -174,6 +183,8 @@ if [[ ! -d "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]]; then
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
         "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
     echo -e "${GREEN}✅ Powerlevel10k installed successfully${NC}"
+else
+    echo -e "${GREEN}✅ Powerlevel10k already installed${NC}"
 fi
 
 # Install Zsh plugins
@@ -181,31 +192,43 @@ echo -e "${BLUE}🔌 Installing Zsh plugins...${NC}"
 
 # zsh-autosuggestions
 if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]]; then
+    echo -e "${YELLOW}📦 Installing zsh-autosuggestions...${NC}"
     git clone https://github.com/zsh-users/zsh-autosuggestions \
         "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+else
+    echo -e "${GREEN}✅ zsh-autosuggestions already installed${NC}"
 fi
 
 # zsh-syntax-highlighting
 if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]]; then
+    echo -e "${YELLOW}📦 Installing zsh-syntax-highlighting...${NC}"
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
         "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+else
+    echo -e "${GREEN}✅ zsh-syntax-highlighting already installed${NC}"
 fi
 
 # zsh-completions
 if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" ]]; then
+    echo -e "${YELLOW}📦 Installing zsh-completions...${NC}"
     git clone https://github.com/zsh-users/zsh-completions \
         "$HOME/.oh-my-zsh/custom/plugins/zsh-completions"
+else
+    echo -e "${GREEN}✅ zsh-completions already installed${NC}"
 fi
 
-echo -e "${GREEN}✅ Zsh plugins installed successfully${NC}"
+echo -e "${GREEN}✅ Zsh plugins installation completed${NC}"
 
 echo -e "${BLUE}🔧 Setting up Tmux...${NC}"
 
 # Install Tmux Plugin Manager
 if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
     echo -e "${YELLOW}📦 Installing Tmux Plugin Manager...${NC}"
+    mkdir -p "$HOME/.tmux/plugins"
     git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
     echo -e "${GREEN}✅ Tmux Plugin Manager installed successfully${NC}"
+else
+    echo -e "${GREEN}✅ Tmux Plugin Manager already installed${NC}"
 fi
 
 echo -e "${BLUE}🌟 Setting up Neovim...${NC}"
@@ -229,7 +252,11 @@ fi
 
 # Install global npm packages for nvim plugins
 echo -e "${YELLOW}📦 Installing global npm packages...${NC}"
-sudo npm install -g swagger-ui-watcher neovim
+if sudo npm install -g swagger-ui-watcher neovim; then
+    echo -e "${GREEN}✅ Global npm packages installed successfully${NC}"
+else
+    echo -e "${YELLOW}⚠️  npm package installation failed, continuing...${NC}"
+fi
 
 echo -e "${BLUE}🔤 Installing fonts...${NC}"
 
@@ -241,13 +268,18 @@ fi
 if [[ ! -f "$HOME/.local/share/fonts/JetBrainsMono Nerd Font Complete.ttf" ]]; then
     echo -e "${YELLOW}🔤 Installing JetBrains Mono Nerd Font...${NC}"
     echo -e "${YELLOW}📥 Downloading font package (~15MB)...${NC}"
-    wget --progress=bar:force "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/JetBrainsMono.zip" 2>&1 | sed 's/^/   /'
-    echo -e "${YELLOW}📦 Extracting fonts...${NC}"
-    unzip -q JetBrainsMono.zip -d "$HOME/.local/share/fonts/"
-    rm JetBrainsMono.zip
-    echo -e "${YELLOW}🔄 Refreshing font cache...${NC}"
-    fc-cache -fv >/dev/null 2>&1
-    echo -e "${GREEN}✅ JetBrains Mono Nerd Font installed successfully${NC}"
+    if wget --progress=bar:force "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/JetBrainsMono.zip" 2>&1 | sed 's/^/   /'; then
+        echo -e "${YELLOW}📦 Extracting fonts...${NC}"
+        unzip -q JetBrainsMono.zip -d "$HOME/.local/share/fonts/"
+        rm JetBrainsMono.zip
+        echo -e "${YELLOW}🔄 Refreshing font cache...${NC}"
+        fc-cache -fv >/dev/null 2>&1
+        echo -e "${GREEN}✅ JetBrains Mono Nerd Font installed successfully${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Font download failed, continuing...${NC}"
+    fi
+else
+    echo -e "${GREEN}✅ JetBrains Mono Nerd Font already installed${NC}"
 fi
 
 echo -e "${BLUE}🐹 Installing Go (optional)...${NC}"
@@ -257,12 +289,17 @@ if ! command_exists go; then
     echo -e "${YELLOW}🐹 Installing Go...${NC}"
     GO_VERSION="1.21.6"
     echo -e "${YELLOW}📥 Downloading Go ${GO_VERSION} (~130MB)...${NC}"
-    wget --progress=bar:force "https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz" 2>&1 | sed 's/^/   /'
-    echo -e "${YELLOW}📦 Installing Go...${NC}"
-    sudo tar -C /usr/local -xzf "go${GO_VERSION}.linux-amd64.tar.gz"
-    rm "go${GO_VERSION}.linux-amd64.tar.gz"
-    echo 'export PATH=$PATH:/usr/local/go/bin' >> "$HOME/.profile"
-    echo -e "${GREEN}✅ Go installed successfully${NC}"
+    if wget --progress=bar:force "https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz" 2>&1 | sed 's/^/   /'; then
+        echo -e "${YELLOW}📦 Installing Go...${NC}"
+        sudo tar -C /usr/local -xzf "go${GO_VERSION}.linux-amd64.tar.gz"
+        rm "go${GO_VERSION}.linux-amd64.tar.gz"
+        echo 'export PATH=$PATH:/usr/local/go/bin' >> "$HOME/.profile"
+        echo -e "${GREEN}✅ Go installed successfully${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Go download failed, continuing...${NC}"
+    fi
+else
+    echo -e "${GREEN}✅ Go already installed${NC}"
 fi
 
 echo -e "${BLUE}🐋 Installing Docker (optional)...${NC}"
@@ -270,12 +307,17 @@ echo -e "${BLUE}🐋 Installing Docker (optional)...${NC}"
 # Install Docker
 if ! command_exists docker; then
     echo -e "${YELLOW}🐋 Installing Docker...${NC}"
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sh get-docker.sh
-    sudo usermod -aG docker "$USER"
-    rm get-docker.sh
-    echo -e "${GREEN}✅ Docker installed successfully${NC}"
-    echo -e "${YELLOW}⚠️  Please log out and log back in for Docker permissions to take effect${NC}"
+    if curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh; then
+        sudo usermod -aG docker "$USER"
+        rm get-docker.sh
+        echo -e "${GREEN}✅ Docker installed successfully${NC}"
+        echo -e "${YELLOW}⚠️  Please log out and log back in for Docker permissions to take effect${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Docker installation failed, continuing...${NC}"
+        rm -f get-docker.sh
+    fi
+else
+    echo -e "${GREEN}✅ Docker already installed${NC}"
 fi
 
 echo -e "${GREEN}🎉 Installation complete!${NC}"
