@@ -229,7 +229,7 @@ fi
 
 # Install global npm packages for nvim plugins
 echo -e "${YELLOW}📦 Installing global npm packages...${NC}"
-npm install -g swagger-ui-watcher neovim
+sudo npm install -g swagger-ui-watcher neovim
 
 echo -e "${BLUE}🔤 Installing fonts...${NC}"
 
