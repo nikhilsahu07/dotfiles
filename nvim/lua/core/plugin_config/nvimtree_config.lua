@@ -7,8 +7,15 @@ require("nvim-tree").setup({
     group_empty = true,
   },
   filters = {
-    dotfiles = true,
+    dotfiles = false,  -- Show dotfiles by default
   },
 })
 
+-- Toggle nvim-tree with Ctrl+B (existing keybind)
 vim.keymap.set('n', '<c-b>', ':NvimTreeToggle<CR>')
+
+-- Toggle dotfiles visibility with leader+.
+vim.keymap.set('n', '<leader>.', function()
+  local api = require('nvim-tree.api')
+  api.tree.toggle_hidden_filter()
+end, { desc = "Toggle dotfiles visibility in nvim-tree" })

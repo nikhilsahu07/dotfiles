@@ -1,9 +1,9 @@
+[core]
+	editor = \"C:\\Users\\heyni\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code\" --wait
+
 [user]
 	name = Nikhil Sahu
 	email = heynikhil07@gmail.com
-
-[core]
-	editor = nvim
 
 [alias]
 	# Branch and repository info
@@ -23,4 +23,4 @@
 	l = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
 	lgp = log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short
 	bl = blame
-		
+
