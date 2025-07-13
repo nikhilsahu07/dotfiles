@@ -1,0 +1,86 @@
+[manager]
+ratio = [1, 4, 3]
+sort_by = "alphabetical"
+sort_sensitive = false
+sort_reverse = false
+sort_dir_first = true
+sort_translit = false
+linemode = "none"
+show_hidden = false
+show_symlink = true
+scrolloff = 5
+mouse_events = ["click", "scroll"]
+title_format = "Yazi: {cwd}"
+
+[preview]
+tab_size = 2
+max_width = 600
+max_height = 900
+cache_dir = ""
+image_filter = "triangle"
+image_quality = 75
+sixel_fraction = 15
+ueberzug_scale = 1
+ueberzug_offset = [0, 0, 0, 0]
+
+[opener]
+edit = [
+  { run = 'nvim "$@"', desc = "Edit in Neovim", block = true, for = "unix" },
+]
+open = [
+  { run = 'xdg-open "$@"', desc = "Open", for = "linux" },
+]
+reveal = [
+  { run = 'xdg-open "$(dirname "$0")"', desc = "Reveal", for = "linux" },
+]
+extract = [
+  { run = 'aunpack "$@"', desc = "Extract here", for = "unix" },
+]
+play = [
+  { run = 'mpv "$@"', desc = "Play with mpv", for = "unix" },
+]
+
+[open]
+rules = [
+  { name = "*/", use = ["edit", "open", "reveal"] },
+  { mime = "text/*", use = ["edit", "reveal"] },
+  { mime = "image/*", use = ["open", "reveal"] },
+  { mime = "video/*", use = ["play", "reveal"] },
+  { mime = "audio/*", use = ["play", "reveal"] },
+  { mime = "inode/x-empty", use = ["edit", "reveal"] },
+  { mime = "application/json", use = ["edit", "reveal"] },
+  { mime = "*/javascript", use = ["edit", "reveal"] },
+  { mime = "*/x-wine-extension-ini", use = ["edit", "reveal"] },
+  { name = "*", use = ["open", "reveal"] },
+]
+
+[tasks]
+micro_workers = 10
+macro_workers = 25
+bizarre_retry = 5
+image_alloc = 536870912  # 512MB
+image_bound = [0, 0]
+suppress_preload = false
+
+[plugin]
+prepend_preloaders = []
+append_preloaders = []
+prepend_previewers = []
+append_previewers = []
+
+[input]
+cursor_blink = false
+
+[select]
+open_title = "Open with:"
+open_origin = "hovered"
+open_offset = [0, 2]
+
+[which]
+sort_by = "none"
+sort_sensitive = false
+sort_reverse = false
+sort_translit = false
+
+[log]
+enabled = false

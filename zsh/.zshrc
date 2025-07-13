@@ -116,6 +116,11 @@ alias which='type -a'
 alias du='du -h'
 alias df='df -h'
 
+# File manager aliases
+alias y='yazi'
+alias ya='yazi'
+alias fm='yazi'
+
 # Development aliases
 alias serve='python3 -m http.server'
 alias py='python3'
