@@ -390,6 +390,36 @@
 | `git br -d branch`    | Delete branch                       |
 | `git br -m newname`   | Rename current branch               |
 
+## 🗂️ Yazi File Manager
+
+> **For complete Yazi configuration, keybindings, and features, see: [Yazi README](yazi/README.md)**
+
+### Quick Reference
+
+| Key               | Action         | Description                            |
+| ----------------- | -------------- | -------------------------------------- |
+| `y` / `ya` / `fm` | Launch Yazi    | Start file manager                     |
+| `<Ctrl+f>`        | FZF Search     | Find files with fzf                    |
+| `<Ctrl+g>`        | Content Search | Search file contents with ripgrep      |
+| `I`               | Preview        | View file with bat syntax highlighting |
+| `<Ctrl+t>`        | Terminal       | Open terminal in current directory     |
+| `h/j/k/l`         | Navigate       | Vim-style navigation                   |
+| `<Enter>`         | Enter          | Enter directory                        |
+| `o`               | Open           | Open file/directory                    |
+| `~`               | Help           | Show all keybindings                   |
+| `q`               | Quit           | Exit Yazi                              |
+
+### Features
+
+- **🎨 Catppuccin Mocha theme** matching your setup
+- **🔍 FZF & Ripgrep integration** for powerful search
+- **🦇 Bat integration** for syntax highlighting
+- **📁 Vim-style navigation** with intuitive shortcuts
+- **🖼️ Image preview** support
+- **⚡ Lightweight** and fast
+
+---
+
 ## 🎯 Productivity Tips
 
 ### Neovim Workflow
