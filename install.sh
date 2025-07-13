@@ -143,6 +143,11 @@ if ! command_exists fd; then
     sudo ln -sf /usr/bin/fdfind /usr/local/bin/fd 2>/dev/null || true
 fi
 
+# Install jq (for JSON processing)
+if ! command_exists jq; then
+    install_package jq "jq (JSON processor)"
+fi
+
 # Install bat (for better file preview) - matches your batcat setup
 if ! command_exists bat && ! command_exists batcat; then
     install_package bat "Bat"
