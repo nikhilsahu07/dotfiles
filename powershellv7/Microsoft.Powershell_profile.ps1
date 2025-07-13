@@ -223,4 +223,4 @@ function pwsh-help {
 }
 
 # === WELCOME MESSAGE ===
-Write-Host "🚀 Enhanced PowerShell loaded! Type 'pwsh-help' for commands. Follow and Star my github nikhilsahu07/dotfiles. To remove this code C:\Users\heyni\OneDrive\Documents\PowerShell\Microsoft.PowerShell_profile.ps1 and remove line 225,226" -ForegroundColor Green
+Write-Host "🚀 Enhanced PowerShell loaded! Type 'pwsh-help' for commands. Follow and Star my github nikhilsahu07/dotfiles. To remove this code $profile and remove line 225,226" -ForegroundColor Green
