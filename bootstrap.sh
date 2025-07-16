@@ -65,6 +65,11 @@ create_symlink "$DOTFILES_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh" "Powerlevel10k co
 # Git configuration
 create_symlink "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig" "Git config"
 
+# Fastfetch configuration
+create_symlink "$DOTFILES_DIR/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc" "Fastfetch config"
+create_symlink "$DOTFILES_DIR/fastfetch/animegirl.txt" "$HOME/.config/fastfetch/animegirl.txt" "Fastfetch config file"
+create_symlink "$DOTFILES_DIR/fastfetch/animegirl.txt.backup" "$HOME/.config/fastfetch/animegirl.txt.backup" "Fastfetch backup file"
+
 echo -e "${GREEN}✅ All configuration files linked successfully!${NC}"
 
 # Check if Oh My Zsh is installed
