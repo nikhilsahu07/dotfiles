@@ -1,0 +1,135 @@
+{
+    "logo": {
+        "source": "~/.config/fastfetch/animegirl.txt",
+        "type": "file",
+        "color": {
+            "1": "216",
+            "2": "223",
+            "3": "230",
+            "4": "231"
+        }
+    },
+    "display": {
+        "separator": " │ ",
+        "color": {
+            "separator": "8"
+        }
+    },
+    "modules": [
+        {
+            "type": "title",
+            "color": {
+                "user": "39",
+                "at": "8",
+                "host": "33"
+            }
+        },
+        {
+            "type": "separator",
+            "string": "─────────────────────────────"
+        },
+        {
+            "type": "os",
+            "key": " OS",
+            "keyColor": "36"
+        },
+        {
+            "type": "host",
+            "key": "󰌢 Host",
+            "keyColor": "35"
+        },
+        {
+            "type": "kernel",
+            "key": " Kernel",
+            "keyColor": "34"
+        },
+        {
+            "type": "uptime",
+            "key": "󰅐 Uptime",
+            "keyColor": "32"
+        },
+        {
+            "type": "packages",
+            "key": "󰏖 Packages",
+            "keyColor": "33"
+        },
+        {
+            "type": "shell",
+            "key": " Shell",
+            "keyColor": "31"
+        },
+        {
+            "type": "display",
+            "key": "󰍹 Display",
+            "keyColor": "36"
+        },
+        {
+            "type": "wm",
+            "key": " WM",
+            "keyColor": "35"
+        },
+        {
+            "type": "theme",
+            "key": "󰉼 Theme",
+            "keyColor": "212"
+        },
+        {
+            "type": "icons",
+            "key": "󰀻 Icons",
+            "keyColor": "34"
+        },
+        {
+            "type": "terminal",
+            "key": " Terminal",
+            "keyColor": "32"
+        },
+        {
+            "type": "cpu",
+            "key": "󰻠 CPU",
+            "keyColor": "212"
+        },
+        {
+            "type": "gpu",
+            "key": "󰍛 GPU",
+            "keyColor": "212"
+        },
+        {
+            "type": "memory",
+            "key": "󰑭 Memory",
+            "keyColor": "31"
+        },
+        {
+            "type": "swap",
+            "key": "󰓡 Swap",
+            "keyColor": "33"
+        },
+        {
+            "type": "disk",
+            "key": "󰋊 Disk",
+            "keyColor": "35"
+        },
+        {
+            "type": "localip",
+            "key": "󰩟 Local IP",
+            "keyColor": "36"
+        },
+        {
+            "type": "battery",
+            "key": "󰂄 Battery",
+            "keyColor": "32"
+        },
+        {
+            "type": "locale",
+            "key": "󰗊 Locale",
+            "keyColor": "34"
+        },
+        {
+            "type": "break"
+        },
+        {
+            "type": "colors",
+            "symbol": "circle"
+        }
+    ]
+}
+
