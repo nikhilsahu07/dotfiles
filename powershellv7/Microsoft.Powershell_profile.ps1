@@ -1,6 +1,7 @@
 # ============================================================================
 # ENHANCED POWERSHELL CONFIGURATION
- ============================================================================
+# Matching Zsh configuration for seamless cross-platform experience
+# ============================================================================
 
 # === OH-MY-POSH PROMPT ===
 oh-my-posh init pwsh --config 'C:\Users\heyni\AppData\Local\Programs\oh-my-posh\themes\powerlevel10k_modern.omp.json' | Invoke-Expression
@@ -25,27 +26,27 @@ Set-PSReadLineKeyHandler -Key Ctrl+d -Function DeleteChar
 
 # === ENHANCED FILE LISTING ALIASES ===
 # Modern file listing with icons (using Terminal-Icons like dir)
-function ls { 
+function ls {
     param([string]$Path = ".")
     Get-ChildItem $Path | Format-Table
 }
 
-function ll { 
+function ll {
     param([string]$Path = ".")
     Get-ChildItem $Path | Format-Table Mode, LastWriteTime, Length, Name -AutoSize
 }
 
-function la { 
+function la {
     param([string]$Path = ".")
     Get-ChildItem $Path -Force | Format-Table Mode, LastWriteTime, Length, Name -AutoSize
 }
 
-function l { 
+function l {
     param([string]$Path = ".")
     Get-ChildItem $Path | Format-Table Mode, LastWriteTime, Length, Name -AutoSize
 }
 
-function lt { 
+function lt {
     param([string]$Path = ".")
     Get-ChildItem $Path | Sort-Object LastWriteTime -Descending | Format-Table Mode, LastWriteTime, Length, Name -AutoSize
 }
@@ -89,7 +90,7 @@ function du { param($path = ".") Get-ChildItem $path -Recurse | Measure-Object -
 function df { Get-PSDrive -PSProvider FileSystem }
 
 # === DEVELOPMENT ALIASES ===
-function serve { 
+function serve {
     param([int]$Port = 8000)
     python -m http.server $Port
 }
@@ -127,21 +128,21 @@ function qfind {
 # Extract archives (PowerShell equivalent)
 function extract {
     param([string]$File)
-    
+
     if (-not $File) {
         Write-Host "Usage: extract <file>" -ForegroundColor Red
         return
     }
-    
+
     if (-not (Test-Path $File)) {
         Write-Host "'$File' is not a valid file" -ForegroundColor Red
         return
     }
-    
+
     $extension = [System.IO.Path]::GetExtension($File).ToLower()
-    
+
     switch ($extension) {
-        ".zip" { 
+        ".zip" {
             Expand-Archive -Path $File -DestinationPath (Get-ChildItem $File).BaseName
             Write-Host "Extracted: $File" -ForegroundColor Green
         }
@@ -166,13 +167,17 @@ function grep {
         [string]$Path = ".",
         [switch]$Recursive
     )
-    
+
     if ($Recursive) {
         Select-String -Pattern $Pattern -Path "$Path\*" -Recurse
     } else {
         Select-String -Pattern $Pattern -Path $Path
     }
 }
+
+# === ALIASES ===
+Set-Alias -Name "code" -Value "C:\Users\heyni\AppData\Local\Programs\Microsoft VS Code\bin\code.cmd"
+Set-Alias -Name "cursor" -Value "C:\Users\heyni\AppData\Local\Programs\cursor\resources\app\bin\cursor.cmd"
 
 # === UTILITY FUNCTIONS ===
 
@@ -221,6 +226,3 @@ function pwsh-help {
     Write-Host "  qfind <pattern>     - Quick file search" -ForegroundColor White
     Write-Host ""
 }
-
-# === WELCOME MESSAGE ===
-Write-Host "🚀 Enhanced PowerShell loaded! Type 'pwsh-help' for commands. Follow and Star my github nikhilsahu07/dotfiles. To remove this code $profile and remove line 225,226" -ForegroundColor Green

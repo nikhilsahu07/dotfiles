@@ -67,8 +67,23 @@ create_symlink "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig" "Git config"
 
 # Fastfetch configuration
 create_symlink "$DOTFILES_DIR/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc" "Fastfetch config"
-create_symlink "$DOTFILES_DIR/fastfetch/animegirl.txt" "$HOME/.config/fastfetch/animegirl.txt" "Fastfetch config file"
-create_symlink "$DOTFILES_DIR/fastfetch/animegirl.txt.backup" "$HOME/.config/fastfetch/animegirl.txt.backup" "Fastfetch backup file"
+
+# Set up fastfetch ASCII art with colors
+echo -e "${YELLOW}🎨 Setting up Fastfetch ASCII art...${NC}"
+mkdir -p "$HOME/.config/fastfetch"
+
+# Copy the original ASCII art as backup
+cp "$DOTFILES_DIR/fastfetch/animegirl.txt.backup" "$HOME/.config/fastfetch/animegirl.txt.backup"
+
+# Generate colored ASCII art
+if [[ -f "$DOTFILES_DIR/fastfetch/create_colored_ascii.sh" ]]; then
+    echo -e "${BLUE}🌈 Generating colored ASCII art...${NC}"
+    bash "$DOTFILES_DIR/fastfetch/create_colored_ascii.sh"
+    echo -e "${GREEN}✅ Colored ASCII art generated${NC}"
+else
+    echo -e "${YELLOW}⚠️  create_colored_ascii.sh not found, copying original ASCII art${NC}"
+    cp "$DOTFILES_DIR/fastfetch/animegirl.txt.backup" "$HOME/.config/fastfetch/animegirl.txt"
+fi
 
 echo -e "${GREEN}✅ All configuration files linked successfully!${NC}"
 

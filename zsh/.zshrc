@@ -116,15 +116,16 @@ alias which='type -a'
 alias du='du -h'
 alias df='df -h'
 
-# File manager aliases
-alias y='yazi'
-alias ya='yazi'
-alias fm='yazi'
-
 # Development aliases
 alias serve='python3 -m http.server'
 alias py='python3'
 alias pip='pip3'
+
+# Yazi file manager aliases
+alias y='yazi'
+alias yls='yazi ls'
+alias ycd='yazi cd'
+alias fm='yazi'
 
 # === CUSTOM FUNCTIONS ===
 mkcd() {
@@ -135,6 +136,11 @@ mkcd() {
 qfind() {
     find . -name "*$1*"
 }
+
+# Custom Aliases for VS Code and Cursor
+alias code='/mnt/c/Users/heyni/AppData/Local/Programs/Microsoft\ VS\ Code/bin/code'
+alias cursor='/mnt/c/Users/heyni/AppData/Local/Programs/cursor/resources/app/bin/cursor'
+
 
 # Extract any archive
 extract() {
@@ -212,4 +218,5 @@ zsh_help() {
 }
 
 # Load Powerlevel10k configuration
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh 
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export PATH="$HOME/.local/bin:$PATH"
