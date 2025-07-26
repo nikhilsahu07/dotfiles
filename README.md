@@ -37,6 +37,19 @@ This dotfiles configuration transforms your development environment into a profe
 - **Custom Status Bar**: Directory and session information
 - **Mouse Support**: Modern mouse interaction
 
+### 🗂️ **Yazi File Manager**
+
+- **Lightning-Fast Navigation**: Blazing-fast terminal file manager with vim-style controls
+- **Catppuccin Mocha Theme**: Perfectly integrated with the overall theme consistency
+- **FZF Integration**: Fuzzy file search with `Ctrl+f` for quick file discovery
+- **Ripgrep Integration**: Content search with `Ctrl+g` for searching inside files
+- **Bat Integration**: Syntax-highlighted file previews with beautiful formatting
+- **Image Preview**: Built-in image viewer for visual file management
+- **Archive Support**: Extract and create archives directly from the interface
+- **Git Integration**: Visual git status, diff, and log viewing
+- **Tab Management**: Multiple directory tabs for efficient workflow
+- **Smart Shortcuts**: Quick navigation to home, config, dotfiles, and projects
+
 ### 🛠️ **Development Tools Integration**
 
 - **Multi-Language Support**: Go, Python, JavaScript, TypeScript, Docker, YAML
@@ -64,6 +77,10 @@ dotfiles/
 │   └── .p10k.zsh              # Powerlevel10k theme configuration
 ├── 📂 git/                    # Git Configuration
 │   └── .gitconfig             # Git settings and aliases
+├── 📂 yazi/                   # Yazi File Manager Configuration
+│   ├── yazi.toml              # Main configuration settings
+│   ├── theme.toml             # Catppuccin Mocha theme
+│   └── keymap.toml            # Custom key bindings and shortcuts
 ├── 🚀 install.sh              # Complete dependency installation
 ├── 🔗 bootstrap.sh            # Configuration linking script
 ├── 📖 README.md               # This overview
@@ -99,6 +116,7 @@ dotfiles/
 
 ### **Modern CLI Tools**
 
+- **yazi** - Lightning-fast file manager with vim-style navigation
 - **lsd** - Modern ls with icons
 - **bat** - Better cat with syntax highlighting
 - **fd** - Better find command
