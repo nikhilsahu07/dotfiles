@@ -68,6 +68,13 @@ create_symlink "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig" "Git config"
 # Fastfetch configuration
 create_symlink "$DOTFILES_DIR/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc" "Fastfetch config"
 
+# Yazi configuration
+if [[ -d "$DOTFILES_DIR/yazi" ]]; then
+    create_symlink "$DOTFILES_DIR/yazi/yazi.toml" "$HOME/.config/yazi/yazi.toml" "Yazi config"
+    create_symlink "$DOTFILES_DIR/yazi/theme.toml" "$HOME/.config/yazi/theme.toml" "Yazi theme"
+    create_symlink "$DOTFILES_DIR/yazi/keymap.toml" "$HOME/.config/yazi/keymap.toml" "Yazi keymap"
+fi
+
 # Set up fastfetch ASCII art with colors
 echo -e "${YELLOW}🎨 Setting up Fastfetch ASCII art...${NC}"
 mkdir -p "$HOME/.config/fastfetch"
@@ -112,4 +119,5 @@ echo -e "   1. Restart your terminal"
 echo -e "   2. Run 'tmux source ~/.tmux.conf' to reload tmux config"
 echo -e "   3. Open nvim and run ':Lazy sync' to install plugins"
 echo -e "   4. For tmux plugins, press prefix + I (Ctrl+b + I) to install"
+echo -e "   5. Test Yazi file manager: yazi"
 echo -e "${BLUE}✨ Enjoy your synchronized development environment!${NC}" 

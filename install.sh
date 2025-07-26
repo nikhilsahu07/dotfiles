@@ -3,12 +3,14 @@
 # ============================================================================
 # DOTFILES INSTALLATION SCRIPT FOR UBUNTU
 # Installs all dependencies and tools for the complete development environment
-# Optimized for Ubuntu remote servers
+# Optimized for Ubuntu remote servers and WSL2
+# 
+# Supported Ubuntu versions: 20.04 LTS, 22.04 LTS, 24.04 LTS
 # 
 # Includes system tools matching your local setup:
 # - git, curl, htop, zip/unzip
 # - ripgrep (rg), fzf, bat (batcat), locate (plocate), lsd, fastfetch
-# - GitHub CLI (gh) for git workflows
+# - GitHub CLI (gh) for git workflows, Yazi file manager
 # - Plus development tools: neovim, tmux, zsh, node.js, python3, go, docker
 # ============================================================================
 
@@ -57,6 +59,18 @@ if [[ -f /etc/os-release ]]; then
     source /etc/os-release
     if [[ "$ID" == "ubuntu" ]]; then
         echo -e "${GREEN}✅ Ubuntu ${VERSION_ID} detected${NC}"
+        # Check for supported versions
+        case "${VERSION_ID}" in
+            "20.04"|"22.04"|"24.04")
+                echo -e "${GREEN}✅ Supported Ubuntu LTS version${NC}"
+                ;;
+            "23.10"|"24.10")
+                echo -e "${GREEN}✅ Supported Ubuntu version${NC}"
+                ;;
+            *)
+                echo -e "${YELLOW}⚠️  Ubuntu ${VERSION_ID} - This script is optimized for Ubuntu 20.04+${NC}"
+                ;;
+        esac
     else
         echo -e "${YELLOW}⚠️  Non-Ubuntu system detected, proceeding anyway...${NC}"
     fi
@@ -161,13 +175,18 @@ fi
 # Install lsd (modern ls replacement)
 if ! command_exists lsd; then
     echo -e "${YELLOW}📂 Installing lsd...${NC}"
-    LSD_VERSION="1.0.0"
+    LSD_VERSION="1.1.5"
     echo -e "${YELLOW}📥 Downloading lsd package...${NC}"
-    wget --progress=bar:force "https://github.com/lsd-rs/lsd/releases/download/v${LSD_VERSION}/lsd_${LSD_VERSION}_amd64.deb" 2>&1 | sed 's/^/   /'
-    echo -e "${YELLOW}📦 Installing lsd package...${NC}"
-    sudo dpkg -i "lsd_${LSD_VERSION}_amd64.deb" || sudo apt-get install -f -y
-    rm "lsd_${LSD_VERSION}_amd64.deb"
-    echo -e "${GREEN}✅ lsd installed successfully${NC}"
+    if wget --progress=bar:force "https://github.com/lsd-rs/lsd/releases/download/v${LSD_VERSION}/lsd_${LSD_VERSION}_amd64.deb" 2>&1 | sed 's/^/   /'; then
+        echo -e "${YELLOW}📦 Installing lsd package...${NC}"
+        sudo dpkg -i "lsd_${LSD_VERSION}_amd64.deb" || sudo apt-get install -f -y
+        rm "lsd_${LSD_VERSION}_amd64.deb"
+        echo -e "${GREEN}✅ lsd installed successfully${NC}"
+    else
+        echo -e "${YELLOW}⚠️  lsd download failed, trying apt package...${NC}"
+        # Fallback to apt if available (newer Ubuntu versions may have it)
+        sudo apt-get install -y lsd 2>/dev/null || echo -e "${YELLOW}⚠️  lsd not available via apt, continuing...${NC}"
+    fi
 else
     echo -e "${GREEN}✅ lsd already installed${NC}"
 fi
@@ -187,6 +206,50 @@ if ! command_exists fastfetch; then
     fi
 else
     echo -e "${GREEN}✅ fastfetch already installed${NC}"
+fi
+
+# Install Yazi (terminal file manager)
+if ! command_exists yazi; then
+    echo -e "${YELLOW}🗂️  Installing Yazi...${NC}"
+    
+    # Prepare directories
+    TMP_DIR="/tmp/yazi-install"
+    YAZI_ZIP="yazi-x86_64-unknown-linux-gnu.zip"
+    BIN_DIR="$HOME/.local/bin"
+    
+    mkdir -p "$TMP_DIR"
+    mkdir -p "$BIN_DIR"
+    
+    echo -e "${YELLOW}📥 Downloading latest Yazi release...${NC}"
+    if curl -L --progress-bar "https://github.com/sxyazi/yazi/releases/latest/download/$YAZI_ZIP" -o "$TMP_DIR/$YAZI_ZIP"; then
+        cd "$TMP_DIR"
+        echo -e "${YELLOW}📦 Extracting Yazi...${NC}"
+        unzip -q "$YAZI_ZIP"
+        
+        echo -e "${YELLOW}🔧 Installing Yazi binary...${NC}"
+        mv yazi-x86_64-unknown-linux-gnu/yazi "$BIN_DIR/"
+        chmod +x "$BIN_DIR/yazi"
+        
+        # Clean up
+        rm -rf "$TMP_DIR"
+        
+        # Add to PATH in .zshrc if not already present
+        ZSHRC="$HOME/.zshrc"
+        if [[ -f "$ZSHRC" ]] && ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$ZSHRC"; then
+            echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$ZSHRC"
+            echo -e "${GREEN}✅ Added ~/.local/bin to PATH in .zshrc${NC}"
+        fi
+        
+        # Make available in current session
+        export PATH="$HOME/.local/bin:$PATH"
+        
+        echo -e "${GREEN}✅ Yazi installed successfully${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Yazi download failed, continuing...${NC}"
+        rm -rf "$TMP_DIR"
+    fi
+else
+    echo -e "${GREEN}✅ Yazi already installed${NC}"
 fi
 
 # Install GitHub CLI (gh)
@@ -291,9 +354,18 @@ echo -e "${BLUE}🌟 Setting up Neovim...${NC}"
 # Install Node.js and npm (required for some nvim plugins)
 if ! command_exists node; then
     echo -e "${YELLOW}📦 Installing Node.js...${NC}"
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    sudo apt-get install -y nodejs
-    echo -e "${GREEN}✅ Node.js installed successfully${NC}"
+    if curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -; then
+        sudo apt-get install -y nodejs
+        if command_exists node; then
+            echo -e "${GREEN}✅ Node.js installed successfully - $(node --version)${NC}"
+        else
+            echo -e "${YELLOW}⚠️  Node.js installation may need shell restart${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  NodeSource repository setup failed, continuing...${NC}"
+    fi
+else
+    echo -e "${GREEN}✅ Node.js already installed - $(node --version)${NC}"
 fi
 
 # Install Python3 and pip3 (required for some nvim plugins)
@@ -303,6 +375,15 @@ fi
 
 if ! command_exists pip3; then
     install_package python3-pip "Python3 pip"
+fi
+
+# Note for Ubuntu 24.04+ users about pip behavior
+if [[ -f /etc/os-release ]]; then
+    source /etc/os-release
+    if [[ "$ID" == "ubuntu" ]] && [[ "${VERSION_ID}" == "24.04" ]]; then
+        echo -e "${BLUE}📝 Ubuntu 24.04 Note: pip now requires virtual environments for global installs${NC}"
+        echo -e "${BLUE}📝 Use 'python3 -m venv venv' then 'source venv/bin/activate' for projects${NC}"
+    fi
 fi
 
 # Install global npm packages for nvim plugins
@@ -382,6 +463,19 @@ echo -e "   2. Restart your terminal or run: exec zsh"
 echo -e "   3. Open tmux and install plugins: tmux then Ctrl+b + I"
 echo -e "   4. Open nvim and install plugins: nvim then :Lazy sync"
 echo -e "   5. Configure your terminal to use JetBrains Mono Nerd Font"
+echo -e "   6. Start Yazi file manager: yazi (configs will be symlinked via bootstrap.sh)"
+
+# Ubuntu 24.04 specific notes
+if [[ -f /etc/os-release ]]; then
+    source /etc/os-release
+    if [[ "$ID" == "ubuntu" ]] && [[ "${VERSION_ID}" == "24.04" ]]; then
+        echo -e "${BLUE}📝 Ubuntu 24.04 specific notes:${NC}"
+        echo -e "   • PipeWire is now the default audio server (replaces PulseAudio)"
+        echo -e "   • Use python virtual environments for pip installs"
+        echo -e "   • GNOME 46 with new Quick Settings and improved performance"
+    fi
+fi
+
 echo -e "${BLUE}✨ Enjoy your new development environment!${NC}"
 echo -e "${CYAN}💡 Thanks, Nikhil for the help with this script!${NC}"
 echo -e "${CYAN}🔗 Follow me on GitHub: github.com/nikhilsahu07${NC}"
