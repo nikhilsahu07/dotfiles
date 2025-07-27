@@ -1,7 +1,7 @@
 # Catppuccin Mocha theme for Yazi
 # Matches nvim, tmux, and zsh Catppuccin Mocha setup
 
-[manager]
+[mgr]
 cwd = { fg = "#89b4fa", bold = true }
 
 # Hovered

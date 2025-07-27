@@ -277,7 +277,9 @@ if ! command_exists fzf; then
         cd "$HOME/.fzf" && git pull
     else
         echo -e "${YELLOW}📥 Cloning fzf repository...${NC}"
-        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+        # Change to home directory to avoid "No such file or directory" error
+        cd "$HOME"
+        git clone --depth 1 https://github.com/junegunn/fzf.git .fzf
     fi
     echo -e "${YELLOW}🔧 Installing fzf...${NC}"
     ~/.fzf/install --all

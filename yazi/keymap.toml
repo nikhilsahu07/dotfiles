@@ -1,7 +1,7 @@
 # Yazi keymap configuration
 # Optimized for lightweight usage with integration to fzf, ripgrep, and bat
 
-[manager]
+[mgr]
 prepend_keymap = [
   # FZF integration
   { on = "<C-f>", run = "shell --block 'fd --type f --hidden --follow | fzf --height 40% --reverse | xargs -I {} echo \"reveal {}\"' --confirm", desc = "Find files with fzf" },
