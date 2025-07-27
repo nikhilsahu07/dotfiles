@@ -94,7 +94,7 @@ sudo apt-get install -y zsh tmux
 
 # Update plocate database for locate command
 echo -e "${YELLOW}🔍 Updating plocate database...${NC}"
-sudo updatedb || echo -e "${YELLOW}⚠️  plocate database update will run automatically${NC}"
+sudo updatedb --localpaths="/" --prunepaths="/mnt /proc /sys /dev /run /tmp /var/tmp /var/cache /var/log /snap /boot /lost+found /media /cdrom" --prunefs="proc sysfs devfs devpts tmpfs fusectl debugfs securityfs cgroup cgroup2 bpf tracefs configfs hugetlbfs mqueue rpc_pipefs autofs binfmt_misc" || echo -e "${YELLOW}⚠️  plocate database update will run automatically${NC}"
 
 # Install Zsh as default shell
 if ! command_exists zsh; then
