@@ -69,16 +69,6 @@
             "keyColor": "35"
         },
         {
-            "type": "theme",
-            "key": "󰉼 Theme",
-            "keyColor": "212"
-        },
-        {
-            "type": "icons",
-            "key": "󰀻 Icons",
-            "keyColor": "34"
-        },
-        {
             "type": "terminal",
             "key": " Terminal",
             "keyColor": "32"
