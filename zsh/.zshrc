@@ -44,9 +44,9 @@ source $ZSH/oh-my-zsh.sh
 
 # === ENVIRONMENT VARIABLES ===
 # Go development
-export PATH=$PATH:/usr/local/go/bin
+export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
+export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
 # Enhanced history
 HISTCONTROL=ignoreboth
@@ -220,3 +220,11 @@ zsh_help() {
 # Load Powerlevel10k configuration
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+# pyenv setup
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+

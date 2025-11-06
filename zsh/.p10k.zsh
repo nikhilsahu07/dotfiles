@@ -51,6 +51,7 @@
     user_joined              # Username (surface0 bg)
     dir                      # Directory (peach bg)
     vcs                      # Git info (green bg)
+    virtualenv               # Virtual environment (mauve bg)
     # Docker (blue bg)
     docker_context
     # Time (purple bg)
@@ -174,6 +175,21 @@
   typeset -g POWERLEVEL9K_DOCKER_CONTEXT_BACKGROUND=$blue
   typeset -g POWERLEVEL9K_DOCKER_CONTEXT_FOREGROUND=$base
   typeset -g POWERLEVEL9K_DOCKER_CONTEXT_VISUAL_IDENTIFIER_EXPANSION=''
+
+  #################################[ Virtualenv ]##################################
+  typeset -g POWERLEVEL9K_VIRTUALENV_BACKGROUND=$mauve
+  typeset -g POWERLEVEL9K_VIRTUALENV_FOREGROUND=$base
+  typeset -g POWERLEVEL9K_VIRTUALENV_VISUAL_IDENTIFIER_EXPANSION=''
+  typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=false
+  typeset -g POWERLEVEL9K_VIRTUALENV_LEFT_DELIMITER=''
+  typeset -g POWERLEVEL9K_VIRTUALENV_RIGHT_DELIMITER=''
+  typeset -g POWERLEVEL9K_VIRTUALENV_PREFIX='%242F%f'
+  typeset -g POWERLEVEL9K_VIRTUALENV_SUFFIX='%242F%f'
+  # Always display just “venv” when any virtual environment is active
+  function prompt_virtualenv() {
+    [[ -n "$VIRTUAL_ENV" ]] && p10k segment -b $mauve -f $base -i '' -t 'venv'
+  }
+  typeset -g POWERLEVEL9K_VIRTUALENV_CONTENT_EXPANSION='venv'
 
   #################################[ Time ]##################################
   typeset -g POWERLEVEL9K_TIME_BACKGROUND=$pink

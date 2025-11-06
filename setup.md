@@ -1,7 +1,7 @@
 # 📋 Setup Guide
 
 > Complete installation and configuration guide for the Professional Development Environment Dotfiles.
-
+# :`
 ## 🚀 Quick Installation
 
 ### Prerequisites
